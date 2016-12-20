@@ -1,1 +1,14 @@
-node-module
+# Built application files
+/node_modules
+
+/if_bad_internet_use_this_lib
+
+.gitignore
+
+package.json
+
+start.bat
+
+start — копия.bat
+
+!!!.babelrc

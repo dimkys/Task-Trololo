@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="main">
+<head>
+  <title>Dimkys Trallo</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <!--<link rel="stylesheet" href="./if_bad_internet_use_this_lib/bootstrap.min.css">
+  <script src="./if_bad_internet_use_this_lib/jquery.min.js"></script>
+  <script src="./if_bad_internet_use_this_lib/bootstrap.min.js"></script>-->
+  <link href="style/style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body ng-controller="BoardController as Board" class="bg-faded">
+<div class="navbar navbar-inverse bg-primary">
+	<div class="container-fluid">
+		<div class="navbar-header">
+      <div class="navbar-brand">Boards</div>
+    </div>
+	  <ul class="nav navbar-nav">
+	    <li class="dropdown" ng-if="Board.boards.length>5"><a class="dropdown-toggle" data-toggle="dropdown">Click me!!!<span class="caret"></span></a>
+	       <div id="dropmenu" class="dropdown-menu navbar-header bg-primary">
+          	<span ng-repeat="item in Board.boards track by $index">
+							<input id="dropMenuButtom"  class="btn" type="button" value="{{item.name}}" ng-click="Board.selectBoard(Board.boards[$index])">
+						</span>
+	       </div>
+	    </li>
+	    <li ng-if="Board.boards.length<=5">
+        <span ng-repeat="item in Board.boards track by $index">
+					<input id="btnMenu" class="btn" type="button" value="{{item.name}}" ng-click="Board.selectBoard(Board.boards[$index])">
+				</span>
+	    </li>
+		</ul>
+			<input id="btnMenu" class="btn" type="button" value="add Board" ng-click="Board.addBoard()">
+			<input id="btnMenu" class="btn btn-danger" type="button" value="DELETE Active Board!!!" ng-click="Board.deleteBoard()" ng-if="Board.ActiveBoard.board">
+			<input id="btnMenu" class="btn btn-success" type="button" value="save boards" ng-click="Board.saveBoard(Board.boards)" >
+			<input id="btnMenu" class="btn btn-success" type="button" value="rename" ng-model="old" ng-click="old=Board.ActiveBoard.board.name" data-toggle="modal" data-target="#boardName" id="usr" ng-if="Board.ActiveBoard.board" >
+				<div id="boardName" class="modal fade" role="dialog">
+				  <div class="modal-dialog">
+				    <!-- Modal content-->
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        <h4 class="modal-title">Rename {{Board.ActiveBoard.board.name}}</h4>
+				      </div>
+				      <div class="modal-body">
+				      <input type="text" class="form-control" id="usr" ng-model="Board.ActiveBoard.board.name">
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="Board.ActiveBoard.board.name=old;">Close</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+  </div>
+</div>
+<div ng-controller="DeskController as Desk">
+	<div class="container" ng-if="Board.ActiveBoard.board"> <input class="btn" type="button" value="add Desk" ng-click="Desk.addDesk()"></div>
+	<div class="container" >
+		<div id="desks" class="nav nav-pills col-xs-3"  ng-repeat="item in Board.ActiveBoard.board.desks track by $index">
+		    <div class="active"><re-name></re-name>
+		    	<div id="cog"  class="glyphicon glyphicon-remove-circle"  width="16" height="16" ng-click="Desk.deleteDesk($index)"></div>
+		    <div id ="notes" ng-repeat="note in Board.ActiveBoard.board.desks[$index].notes track by $index">
+		    	<div>
+		    		<div id="cog" class="glyphicon glyphicon-arrow-left" width="16" height="16"  ng-click="Board.moveLeft($parent.$index,$index)"></div>
+			    	{{note.name}}
+			    	<div id="cog" class="glyphicon glyphicon-remove-circle"  width="16" height="16" ng-click="Desk.deleteNote($parent.$index,$index)"></div>
+			    	<div id="cog" class="glyphicon glyphicon-arrow-right" width="16" height="16"   ng-click="Board.moveRight($parent.$index,$index)"></div>
+			    	<div id="cog" class="glyphicon glyphicon-cog" width="16" height="16"   ng-click="Desk.selectNote(note)" data-toggle="modal" data-target="#noteEdit"></div>
+
+		    	</div>
+		    	<p><input class="form-control input-lg" type="text" ng-model="note.text"></p>
+		    </div>
+		    <div ng-if="item"><input class="btn" type="button" value="add note" ng-click="Desk.addNote($index)"></div>
+		  </div>
+		</div>
+	</div>
+</div>
+<note-edit><note-edit>
+	<script src="./bundle.js"></script>
+</body>
+</html>
